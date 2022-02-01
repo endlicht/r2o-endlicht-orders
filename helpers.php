@@ -1,4 +1,7 @@
 <?php
+
+use JetBrains\PhpStorm\Pure;
+
 /**
  * Escape all html characters.
  * @param string|null $string $string
@@ -17,7 +20,7 @@ function clean_string(string|null $string): string
  * @param string $key
  * @return string
  */
-function get_value(string $key): string
+#[Pure] function get_value(string $key): string
 {
     if ($key != null && isset($_GET[$key])) {
         return clean_string($_GET[$key]);
