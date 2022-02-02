@@ -1,17 +1,18 @@
 {
-    "name": "endlicht-r2o/endlicht-r2o-back",
-    "description": "Backend for endlicht-r2o",
-    "license": "MIT",
-    "scripts": {
-        "dev": "php -S 127.0.0.1:8000",
-        "lint": "phpstan analyse -c phpstan.neon"
-    },
-    "require": {
-        "ready2order/r2o-api-client-php": "^1.2",
-        "vlucas/phpdotenv": "^5.4"
-    },
-    "require-dev": {
-        "roave/security-advisories": "dev-latest",
-        "phpstan/phpstan": "^1.4.0"
-    }
+  "name": "endlicht-r2o/endlicht-r2o-back",
+  "description": "Backend for endlicht-r2o",
+  "license": "MIT",
+  "scripts": {
+    "dev": "php -S 127.0.0.1:8000",
+    "lint": "phpstan analyse -c phpstan.neon"
+  },
+  "require": {
+    "ready2order/r2o-api-client-php": "^1.2",
+    "vlucas/phpdotenv": "^5.4",
+    "ext-curl": "*"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-latest",
+    "phpstan/phpstan": "^1.4.0"
+  }
 }
