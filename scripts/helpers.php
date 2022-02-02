@@ -9,7 +9,7 @@ use JetBrains\PhpStorm\Pure;
  */
 function clean_string(string|null $string): string
 {
-    if ($string == null) {
+    if ($string === null) {
         return '';
     }
     return htmlspecialchars($string, ENT_QUOTES);
@@ -22,7 +22,7 @@ function clean_string(string|null $string): string
  */
 #[Pure] function get_value(string $key): string
 {
-    if ($key != null && isset($_GET[$key])) {
+    if ($key !== null && isset($_GET[$key])) {
         return clean_string($_GET[$key]);
     }
     return '';
