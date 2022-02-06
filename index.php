@@ -11,6 +11,7 @@ include("scripts/auth.php");
 include("scripts/helpers.php");
 include_once("scripts/client.php");
 include_once("scripts/checkAuth.php");
+include_once("scripts/company.php");
 
 /* Used to load private key from .env file */
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
@@ -23,7 +24,7 @@ $SERVER_ADDRESS = "http://{$_SERVER['HTTP_HOST']}";
 
 $PARSED_URL = parse_url($URL, PHP_URL_PATH);
 
-$TITLE = "Endlicht Bestellungen";
+$TITLE = get_company_name() . " Bestellungen";
 
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
@@ -104,7 +105,7 @@ if ($PARSED_URL === '/auth') {
     try {
         $grantAccessResponse = auth_as_developer($_ENV['DEVELOPER_TOKEN'], $SERVER_ADDRESS . '/granted');
     } catch (JsonException $e) {
-        ?>Ein Fehler beim Authentifizieren ist aufgetreten<?php
+        ?><h2>Ein Fehler beim Authentifizieren als Entwickler ist aufgetreten!</h2><?php
         exit();
     }
     /* Safe grantAccessToken to session */
@@ -120,7 +121,7 @@ if ($PARSED_URL === '/auth') {
     $status = get_value('status');
     $grantAccessToken = get_value('grantAccessToken');
     if ($status !== 'approved' /* check status */ || $grantAccessToken !== $_SESSION['grantAccessToken'] /* Check if grantAccessToken is valid */) {
-        ?><h2>Ein Fehler ist aufgetreten!</h2><?php
+        ?><h2>Ein Fehler ist beim Anmelden bei ready2order aufgetreten!</h2><?php
         exit();
     }
 
