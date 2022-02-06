@@ -20,6 +20,7 @@ session_start();
 
 $URL = $_SERVER['REQUEST_URI'];
 $SERVER_ADDRESS = "http://{$_SERVER['HTTP_HOST']}";
+$_SESSION['SERVER_ADDRESS'] = $SERVER_ADDRESS;
 
 $PARSED_URL = parse_url($URL, PHP_URL_PATH);
 
