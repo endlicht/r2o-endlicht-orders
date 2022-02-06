@@ -1,9 +1,16 @@
 <?php
+/*
+*    endlicht-r2o-back: The endlicht ready to order application.
+*    Copyright (c) 2022 Josef Müller
+*
+*    Please see LICENSE file for your rights under this license. */
 
 require __DIR__ . '/vendor/autoload.php';
 
 include("scripts/auth.php");
 include("scripts/helpers.php");
+include_once("scripts/client.php");
+include_once("scripts/checkAuth.php");
 
 /* Used to load private key from .env file */
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
@@ -27,9 +34,9 @@ $TITLE = "Endlicht Bestellungen";
     <meta content="default-src 'none'; base-uri 'none'; child-src 'self'; form-action 'self'; frame-src 'self'; font-src 'self'; connect-src 'self'; img-src 'self'; manifest-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'"
           http-equiv="Content-Security-Policy">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>
-        <?php echo $TITLE; ?>
-    </title>
+    <meta name="description" content="Endlicht Bestellungen">
+    <meta name="author" content="Josef Müller">
+    <title><?php echo $TITLE; ?></title>
     <style>
         body {
             text-align: left;
@@ -54,10 +61,6 @@ $TITLE = "Endlicht Bestellungen";
             border: thin solid black;
         }
 
-        .product-name {
-            font-weight: bold;
-        }
-
         .button {
             background-color: #a0aaaa;
             border: thin solid black;
@@ -76,43 +79,59 @@ $TITLE = "Endlicht Bestellungen";
 <body>
 <h1><?php echo $TITLE; ?></h1>
 <nav class="navigation">
-    <a href="<?php echo $SERVER_ADDRESS; ?>" class="button">Aktualisieren</a>
-    <!-- <a href="<?php echo $SERVER_ADDRESS . '/token'; ?>">Token</a> -->
+    <?php if (!is_logged_in()) { ?>
+        <!-- Button to authenticate at ready2order API -->
+        <a href="<?php echo $SERVER_ADDRESS . '/auth'; ?>" class="button">Anmelden</a>
+    <?php } ?>
+    <?php if (is_logged_in()) { ?>
+        <!-- Button to refresh page -->
+        <a href="<?php echo $SERVER_ADDRESS; ?>" class="button">Aktualisieren</a>
+        <!-- Show last time the page was refreshed -->
+        <?php echo "Letzte Aktualisierung: " . date("d.m.Y H:i:s"); ?>
+    <?php } ?>
 </nav>
 
 <?php
 
-if ($PARSED_URL === '/auth' || ($PARSED_URL !== '/granted' && /* check if tokens are set */
-        (!isset($_SESSION['grantAccessToken'], $_SESSION['accountToken'])))) {
-    $grantAccessResponse = auth_as_developer($_ENV['DEVELOPER_TOKEN'], $SERVER_ADDRESS . '/granted');
+$client = get_client();
+
+if ($PARSED_URL === '/auth') {
+    /* Authenticate developer at ready2order API */
+    try {
+        $grantAccessResponse = auth_as_developer($_ENV['DEVELOPER_TOKEN'], $SERVER_ADDRESS . '/granted');
+    } catch (JsonException $e) {
+        ?>Ein Fehler beim Authentifizieren ist aufgetreten<?php
+        exit();
+    }
+    /* Safe grantAccessToken to session */
     $_SESSION['grantAccessToken'] = $grantAccessResponse['grantAccessToken'];
 
     /* Redirect to ready2order authorization page */
     header('Location: ' . $grantAccessResponse['grantAccessUri'], true, 301);
 } else if ($PARSED_URL === '/token') {
-    ?>
-    <ul>
-        <li>DEVELOPER TOKEN: <code><?php echo $_ENV['DEVELOPER_TOKEN'] ?></code></li>
-        <li>GRANT ACCESS TOKEN: <code><?php echo $_SESSION['grantAccessToken'] ?></code></li>
-        <li>ACCOUNT TOKEN: <code><?php echo $_SESSION['accountToken'] ?></code></li>
-    </ul>
-    <?php
+    /* Show all tokens */
+    require('template/token.php');
 } else if ($PARSED_URL === '/granted') {
     /* Get status and grantAccessToken from ready2order */
     $status = get_value('status');
     $grantAccessToken = get_value('grantAccessToken');
     if ($status !== 'approved' /* check status */ || $grantAccessToken !== $_SESSION['grantAccessToken'] /* Check if grantAccessToken is valid */) {
         echo 'FEHLER! Nicht autorisiert!';
-        exit;
+        exit();
     }
 
-    /* Get accountToken from ready2order and save as session token */
+    /* Get accountToken from ready2order and save it as a SESSION Token */
     $accountToken = get_value('accountToken');
     $_SESSION['accountToken'] = $accountToken;
+    $_SESSION['client'] = get_client($accountToken);
 
     /* Redirect to index.php */
     header('Location: ' . $SERVER_ADDRESS, true, 301);
 } else {
+    /* Inform if day is opened */
+    include("template/dailyReport.php");
+
+    /* Show orders */
     include("template/orders.php");
 }
 ?>
