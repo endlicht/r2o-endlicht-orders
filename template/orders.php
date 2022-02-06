@@ -11,20 +11,36 @@ if ($client === false) {
 }
 
 /* Define keys for table */
-$name = 'item_product_name';
-$quantity = 'item_quantity';
-$timestamp = 'item_timestamp';
-$timestamp_invoice = 'invoice_timestamp';
+$key_name = 'item_product_name';
+$key_quantity = 'item_quantity';
+$key_timestamp = 'item_timestamp';
+$key_timestamp_invoice = 'invoice_timestamp';
 
-try {
-    $orders = $client->get('document/invoice', ['items' => true]);
-} catch (Exception $e) {
-    ?>
-    <h2>Kein Zugriff auf die Bestellungen möglich! Eine Anmeldung ist erforderlich</h2>
-    <?php
-    exit();
+$PAST_HOURS = 24;
+/* Current date */
+$timestamp_now = date('Y-m-d', time() - (60 * 60 * $PAST_HOURS));
+
+function get_orders(string|null $date = null): array|false
+{
+    global $client, $timestamp_now;
+    if ($date === null) {
+        $date = $timestamp_now;
+    }
+
+    try {
+        return $client->get('document/invoice', ['items' => true, 'dateFrom' => $date])['invoices'];
+    } catch (Exception) {
+        return false;
+    }
 }
+
+$orders = get_orders();
+if ($orders === false) {
+    return;
+}
+
 ?>
+
 <table>
     <thead>
     <tr>
@@ -36,16 +52,25 @@ try {
     <tbody>
 
     <?php
-    foreach ($orders['invoices'] as $invoices) {
-        foreach ($invoices['items'] as $item) {
-            $time = date('H:i, d.m.Y', strtotime($item[$timestamp]));
-            ?>
-            <tr>
-                <td class="product-name"><?php echo $item[$name] ?></td>
-                <td class="product-quantity"><?php echo $item[$quantity] ?></td>
-                <td colspan="100%" class="timestamp"><?php echo $time ?></td>
-            </tr>
-        <?php }
+    if (count($orders) === 0) {
+        ?>
+        <tr>
+            <td colspan="3">Keine Bestellungen gefunden</td>
+        </tr>
+        <?php
+    } else {
+        foreach ($orders as $invoices) {
+            foreach ($invoices['items'] as $item) {
+                /* Time as string */
+                $time = date('H:i, d.m.Y', strtotime($item[$key_timestamp]));
+                ?>
+                <tr>
+                    <td class="product-name"><?php echo $item[$key_name] ?></td>
+                    <td class="product-quantity"><?php echo $item[$key_quantity] ?></td>
+                    <td colspan="100%" class="timestamp"><?php echo $time ?></td>
+                </tr>
+            <?php }
+        }
     } ?>
     </tbody>
 </table>
