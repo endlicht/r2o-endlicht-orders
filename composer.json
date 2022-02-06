@@ -1,6 +1,6 @@
 {
-  "name": "endlicht-r2o/endlicht-r2o-back",
-  "description": "Backend for endlicht-r2o",
+  "name": "jpkmiller/r2o-orders",
+  "description": "An example app for r2o to show how to use the API",
   "license": "MIT",
   "scripts": {
     "dev": "php -S 127.0.0.1:8000",
