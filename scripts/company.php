@@ -4,13 +4,12 @@
 *    Copyright (c) 2022 Josef Müller
 *
 *    Please see LICENSE file for your rights under this license. */
-$client = get_client();
-if ($client === false) {
-    return;
+
+function get_company_name(): string {
+    $client = get_client();
+    if ($client === false) {
+        return '';
+    }
+    return $client->get('company')['company_name'];
 }
 
-$company_name = $client->get('company')['company_name'];
-$TITLE = $company_name . " Bestellungen";
-
-?>
-<?php echo $TITLE ?>
