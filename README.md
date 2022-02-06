@@ -6,7 +6,8 @@
 2. Install dependencies with `composer` via `composer install`.
 3. Register at [ready2order](https://ready2order.com/at/api/) as developer and get an API token.
 4. Save API token in `.env` file. See below.
-5. Start the editor and call `composer dev` in the command line. This will start a development server at `localhost:8000`.
+5. Start the editor and call `composer dev` in the command line. This will start a development server
+   at `localhost:8000`.
 6. You're ready to go.
 
 ### `.env` file
