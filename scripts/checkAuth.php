@@ -13,7 +13,7 @@ function is_logged_in(): bool
         return false;
     }
     try {
-        $client->get('document/invoice', ['items' => true]);
+        $client->get('company');
         return isset($_SESSION['grantAccessToken'], $_SESSION['accountToken']);
     } catch (Exception) {
         return false;
