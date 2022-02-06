@@ -24,7 +24,7 @@ $SERVER_ADDRESS = "http://{$_SERVER['HTTP_HOST']}";
 
 $PARSED_URL = parse_url($URL, PHP_URL_PATH);
 
-$TITLE = get_company_name() . " Bestellungen";
+$TITLE = 'Bestellungen'; /* get_company_name() . " Bestellungen"; */
 
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
