@@ -20,11 +20,14 @@ session_start();
 
 $URL = $_SERVER['REQUEST_URI'];
 $SERVER_ADDRESS = "http://{$_SERVER['HTTP_HOST']}";
-$_SESSION['SERVER_ADDRESS'] = $SERVER_ADDRESS;
 
 $PARSED_URL = parse_url($URL, PHP_URL_PATH);
 
 $TITLE = "Endlicht Bestellungen";
+
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
 
 ?>
 <!doctype html>
@@ -108,7 +111,7 @@ if ($PARSED_URL === '/auth') {
     $_SESSION['grantAccessToken'] = $grantAccessResponse['grantAccessToken'];
 
     /* Redirect to ready2order authorization page */
-    header('Location: ' . $grantAccessResponse['grantAccessUri'], true, 301);
+    header('Location: ' . $grantAccessResponse['grantAccessUri'], true, 302);
 } else if ($PARSED_URL === '/token') {
     /* Show all tokens */
     require('template/token.php');
@@ -117,17 +120,24 @@ if ($PARSED_URL === '/auth') {
     $status = get_value('status');
     $grantAccessToken = get_value('grantAccessToken');
     if ($status !== 'approved' /* check status */ || $grantAccessToken !== $_SESSION['grantAccessToken'] /* Check if grantAccessToken is valid */) {
-        echo 'FEHLER! Nicht autorisiert!';
+        ?><h2>Ein Fehler ist aufgetreten!</h2><?php
         exit();
     }
 
     /* Get accountToken from ready2order and save it as a SESSION Token */
     $accountToken = get_value('accountToken');
+
+    /* Restart session and invalidate session data */
+    session_destroy();
+    session_start();
+
+    /* Save tokens and client to session */
     $_SESSION['accountToken'] = $accountToken;
+    $_SESSION['grantAccessToken'] = $grantAccessToken;
     $_SESSION['client'] = get_client($accountToken);
 
     /* Redirect to index.php */
-    header('Location: ' . $SERVER_ADDRESS, true, 301);
+    header('Location: ' . $SERVER_ADDRESS, true, 302);
 } else {
     /* Inform if day is opened */
     include("template/dailyReport.php");
