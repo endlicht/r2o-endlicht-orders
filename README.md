@@ -1,4 +1,4 @@
-The simple way of showing orders from [ready2order pOS system](https://ready2order.com/de/) API.
+A simple way of showing orders from [ready2order pOS system](https://ready2order.com/de/) API.
 
 ## Getting started
 
