@@ -2,8 +2,6 @@
 
 $TITLE = get_company_name() . " Bestellungen";
 ?>
-
-<html lang="de">
 <head>
     <meta charset="utf-8">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
