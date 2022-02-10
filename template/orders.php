@@ -39,14 +39,16 @@ if ($orders === false) {
     return;
 }
 
+$amount_orders = 0;
+
 ?>
 
-<table>
+<table class="table">
     <thead>
     <tr>
-        <th>Produkt</th>
-        <th>Anzahl</th>
-        <th>Datum</th>
+        <th scope="col">Produkt</th>
+        <th scope="col">Anzahl</th>
+        <th scope="col">Datum</th>
     </tr>
     </thead>
     <tbody>
@@ -55,12 +57,13 @@ if ($orders === false) {
     if (count($orders) === 0) {
         ?>
         <tr>
-            <td colspan="3">Keine Bestellungen gefunden</td>
+            <td colspan="3">Aktuell gibt es keine Bestellungen.</td>
         </tr>
         <?php
     } else {
         foreach ($orders as $invoices) {
             foreach ($invoices['items'] as $item) {
+                $amount_orders++;
                 /* Time as string */
                 $time = date('H:i, d.m.Y', strtotime($item[$key_timestamp]));
                 ?>
@@ -71,6 +74,10 @@ if ($orders === false) {
                 </tr>
             <?php }
         }
-    } ?>
+    }
+
+    $_SESSION['amount_orders'] = $amount_orders;
+
+    ?>
     </tbody>
 </table>
