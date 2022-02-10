@@ -21,11 +21,11 @@ $_SESSION['open'] = $open;
 
 if ($open) {
     ?>
-    <h3>Hallo. Hier siehst du die letzten Bestellungen.</h3>
+    Der Tag ist geöffnet.
     <?php
 } else {
     ?>
-    <h3>Der Tag ist geschlossen. Bis morgen :)</h3>
+    Der Tag ist geschlossen.
     <?php
 }
 ?>
