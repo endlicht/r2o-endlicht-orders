@@ -1,5 +1,7 @@
 A simple way of showing orders from [ready2order pOS system](https://ready2order.com/de/) API.
 
+![Heroku](https://pyheroku-badge.herokuapp.com/?app=kaffee-ist-geil&style=flat)
+
 ## Getting started
 
 1. Install `php` and `composer`.
