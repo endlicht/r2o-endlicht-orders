@@ -2,4 +2,4 @@
 .env
 composer.phar
 vendor/
-cache
+*.priv

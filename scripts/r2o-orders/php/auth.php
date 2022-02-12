@@ -5,6 +5,10 @@
 *
 *    Please see LICENSE file for your rights under this license. */
 
+use ready2order\Client;
+
+$config = parse_ini_file("etc/config.ini");
+
 /**
  * Authenticate at the ready2order API as a developer with a DEVELOPER TOKEN.
  * @param string $dev_token
@@ -42,17 +46,12 @@ function auth_as_developer(string $dev_token, string $callback_uri = 'http://loc
 }
 
 /**
- * Check if the access is valid.
+ * Test Client.
+ * @param Client $client
  * @return bool
  */
-function is_logged_in(): bool
+function _try_client(Client $client): bool
 {
-    /* Get client */
-    $client = update_and_get_client();
-    if ($client === false) {
-        return false;
-    }
-
     try {
         /* Get throws an exception if the access is invalid */
         $client->get('company');
@@ -63,26 +62,58 @@ function is_logged_in(): bool
 }
 
 /**
+ * Check if the access is valid.
+ * @return Client|false
+ */
+function get_client_if_logged_in(): Client|false
+{
+    /* Get Client from SESSION */
+    if (isset($_SESSION['client'])) {
+        $client = $_SESSION['client'];
+
+        /* Check if client is valid */
+        if ($client && _try_client($client)) {
+            return $client;
+        }
+    }
+
+    $accountToken = update_and_get_account_token();
+    if ($accountToken !== false) {
+        $client = new Client($accountToken);
+        if (_try_client($client)) {
+            $_SESSION['client'] = $client;
+            return $client;
+        }
+    }
+
+    return false;
+}
+
+
+/**
  * Get accountToken from cache, SESSION or param and update it respectively.
  * @param string|false|null $account_token
  * @return string|false
  */
 function update_and_get_account_token(string|null|false $account_token = null): string|false
 {
+    global $config;
     /* Get accountToken from cache */
-    if ($account_token === null || $account_token === false) {
-        $account_token = @file_get_contents('cache/accountToken.txt');
+    if (($account_token === null || $account_token === false) && $config['cacheAccountToken'] === '1') {
+        $account_token = @file_get_contents('cache/accountToken.priv');
     }
 
     /* Get accountToken from SESSION */
-    if ($account_token === false && isset($_SESSION['accountToken'])) {
+    if (isset($_SESSION['accountToken']) && ($account_token === null || $account_token === false)) {
         $account_token = $_SESSION['accountToken'];
     }
 
     if ($account_token !== false && $account_token !== null) {
         /* Update cache and SESSION */
         $_SESSION['accountToken'] = $account_token;
-        safe_to_file('cache/accountToken.txt', $account_token);
+        if ($config['cacheAccountToken'] === '1') {
+            safe_to_file('cache/accountToken.priv', $account_token);
+        }
         return $account_token;
     }
 
