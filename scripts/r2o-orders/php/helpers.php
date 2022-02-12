@@ -32,3 +32,21 @@ function clean_string(string|null $string): string
     }
     return '';
 }
+
+/**
+ * Safe value to file.
+ */
+function safe_to_file(string $path, string $value): bool
+{
+    $file = fopen($path, 'wb');
+    if ($file === false) {
+        return false;
+    }
+    if (fwrite($file, $value) === false) {
+        return false;
+    }
+    if (fclose($file) === false) {
+        return false;
+    }
+    return true;
+}
