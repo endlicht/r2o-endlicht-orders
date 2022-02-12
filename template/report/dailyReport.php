@@ -5,7 +5,7 @@
 *
 *    Please see LICENSE file for your rights under this license. */
 
-$client = get_client();
+$client = get_client_if_logged_in();
 if ($client === false) {
     return;
 }
