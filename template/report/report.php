@@ -1,5 +1,5 @@
 <?php
-if (is_logged_in()) {
+if (get_client_if_logged_in() !== false) {
     ?>
     <div class="card">
         <div class="card-body">

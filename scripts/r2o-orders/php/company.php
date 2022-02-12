@@ -6,7 +6,7 @@
 *    Please see LICENSE file for your rights under this license. */
 
 function get_company_name(): string {
-    $client = get_client();
+    $client = get_client_if_logged_in();
     if ($client === false) {
         return '';
     }
