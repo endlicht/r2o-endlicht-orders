@@ -36,9 +36,12 @@ function clean_string(string|null $string): string
 /**
  * Safe value to file.
  */
-function safe_to_file(string $path, string $value): bool
+function safe_to_file(string $folderpath, string $filename, string $value): bool
 {
-    $file = fopen($path, 'wb');
+    if (!is_dir($folderpath) && !mkdir($folderpath, 0777, true) && !is_dir($folderpath)) {
+        throw new \RuntimeException(sprintf('Directory "%s" was not created', $folderpath));
+    }
+    $file = fopen($folderpath . '/' . $filename, 'wb');
     if ($file === false) {
         return false;
     }

@@ -112,7 +112,7 @@ function update_and_get_account_token(string|null|false $account_token = null): 
         /* Update cache and SESSION */
         $_SESSION['accountToken'] = $account_token;
         if ($config['cacheAccountToken'] === '1') {
-            safe_to_file('cache/accountToken.priv', $account_token);
+            safe_to_file('cache/', 'accountToken.priv', $account_token);
         }
         return $account_token;
     }
