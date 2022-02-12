@@ -40,3 +40,51 @@ function auth_as_developer(string $dev_token, string $callback_uri = 'http://loc
     /* Decode JSON response */
     return json_decode($response, true, 512, JSON_THROW_ON_ERROR);
 }
+
+/**
+ * Check if the access is valid.
+ * @return bool
+ */
+function is_logged_in(): bool
+{
+    /* Get client */
+    $client = update_and_get_client();
+    if ($client === false) {
+        return false;
+    }
+
+    try {
+        /* Get throws an exception if the access is invalid */
+        $client->get('company');
+        return true;
+    } catch (Exception) {
+        return false;
+    }
+}
+
+/**
+ * Get accountToken from cache, SESSION or param and update it respectively.
+ * @param string|false|null $account_token
+ * @return string|false
+ */
+function update_and_get_account_token(string|null|false $account_token = null): string|false
+{
+    /* Get accountToken from cache */
+    if ($account_token === null || $account_token === false) {
+        $account_token = @file_get_contents('cache/accountToken.txt');
+    }
+
+    /* Get accountToken from SESSION */
+    if ($account_token === false && isset($_SESSION['accountToken'])) {
+        $account_token = $_SESSION['accountToken'];
+    }
+
+    if ($account_token !== false && $account_token !== null) {
+        /* Update cache and SESSION */
+        $_SESSION['accountToken'] = $account_token;
+        safe_to_file('cache/accountToken.txt', $account_token);
+        return $account_token;
+    }
+
+    return false;
+}
