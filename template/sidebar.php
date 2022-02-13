@@ -8,7 +8,7 @@ $SERVER_ADDRESS = create_internal_link();
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column">
                 <li class="nav-item menu-open">
-                    <a href="#" class="nav-link active">
+                    <a href="<?php echo create_internal_link(); ?>" class="nav-link active">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>Übersicht
                             <i class="right fas fa-angle-left"></i>
@@ -18,7 +18,7 @@ $SERVER_ADDRESS = create_internal_link();
                         <?php if (!$is_logged_in) { ?>
                             <li class="nav-item">
                                 <!-- Link to authenticate at ready2order API -->
-                                <a href="<?php echo $SERVER_ADDRESS . '/auth'; ?>" class="nav-link">Anmelden</a>
+                                <a href="<?php echo create_internal_link('/auth'); ?>" class="nav-link">Anmelden</a>
                             </li>
                         <?php } ?>
                         <?php if ($is_logged_in) { ?>
