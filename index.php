@@ -43,7 +43,7 @@ update_and_get_account_token();
         <div class="content-header">
             <div class="content-fluid">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Übersicht</h1>
+                    <h1 class="m-0">Dashboard</h1>
                 </div>
             </div>
         </div>
@@ -69,6 +69,14 @@ update_and_get_account_token();
                 } else if ($PARSED_URL === '/token') {
                     /* Show all tokens */
                     require('template/token.php');
+                } else if ($PARSED_URL === '/logout') {
+                    /* Revoke access from ready2order */
+                    $client = get_client_if_logged_in();
+                    if ($client !== false) {
+                        $client->post('access/revoke');
+                        /* Remove session */
+                        session_destroy();
+                    }
                 } else if ($PARSED_URL === '/granted') {
                     /* Get status and grantAccessToken from ready2order */
                     $status = get_value('status');
@@ -96,14 +104,20 @@ update_and_get_account_token();
                     /* Redirect to index.php */
                     header('Location: ' . create_internal_link(), true, 302);
                 } else {
-                    /* Inform if day is opened */
-                    include("template/report/report.php");
                     ?>
-                    <div class="my-3">
-                        <?php
-                        /* Show orders */
-                        include("template/orders.php");
-                        ?>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <?php
+                            /* Show orders */
+                            include("template/orders.php");
+                            ?>
+                        </div>
+                        <div class="col-lg-6">
+                            <?php
+                            /* Inform if day is opened */
+                            include("template/report/report.php");
+                            ?>
+                        </div>
                     </div>
                     <?php
                 }
