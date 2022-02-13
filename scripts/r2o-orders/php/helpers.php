@@ -53,3 +53,16 @@ function safe_to_file(string $folderpath, string $filename, string $value): bool
     }
     return true;
 }
+
+$SERVER_ADDRESS = $_SESSION['SERVER_ADDRESS'] ?? "http://{$_SERVER['HTTP_HOST']}";
+
+/**
+ * Creates link with SERVER_ADDRESS as base.
+ * @param string $link
+ * @return string
+ */
+function create_internal_link(string $link = ''): string
+{
+    global $SERVER_ADDRESS;
+    return $SERVER_ADDRESS . $link;
+}

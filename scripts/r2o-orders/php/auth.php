@@ -15,7 +15,6 @@ $config = parse_ini_file("etc/config.ini");
  * @param string $callback_uri
  * @return mixed
  * @throws JsonException
- * @noinspection PhpMultipleClassDeclarationsInspection
  */
 function auth_as_developer(string $dev_token, string $callback_uri = 'http://localhost:8000/granted'): mixed
 {

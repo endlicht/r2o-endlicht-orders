@@ -5,6 +5,10 @@
 *
 *    Please see LICENSE file for your rights under this license. */
 
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+set_error_handler("var_dump");
+
 require __DIR__ . '/vendor/autoload.php';
 
 include("scripts/r2o-orders/php/auth.php");
@@ -18,8 +22,6 @@ $dotenv->safeLoad();
 session_start();
 
 $URL = $_SERVER['REQUEST_URI'];
-$SERVER_ADDRESS = "http://{$_SERVER['HTTP_HOST']}";
-$_SESSION['SERVER_ADDRESS'] = $SERVER_ADDRESS;
 
 $PARSED_URL = parse_url($URL, PHP_URL_PATH);
 
@@ -33,68 +35,86 @@ update_and_get_account_token();
 ?>
 <!doctype html>
 <html lang="de">
-<?php require("template/header.php"); ?>
-<body>
-<?php require("template/navigation.php"); ?>
-<div class="container-fluid my-3">
+<?php include_once("template/head.php"); ?>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
 
     <?php
-
-    if ($PARSED_URL === '/auth') {
-        /* Authenticate developer at ready2order API */
-        try {
-            $grantAccessResponse = auth_as_developer($_ENV['DEVELOPER_TOKEN'], $SERVER_ADDRESS . '/granted');
-        } catch (JsonException $e) {
-            ?><h2>Ein Fehler beim Authentifizieren als Entwickler ist aufgetreten!</h2><?php
-            exit();
-        }
-        /* Safe grantAccessToken to session */
-        $_SESSION['grantAccessToken'] = $grantAccessResponse['grantAccessToken'];
-
-        /* Redirect to ready2order authorization page */
-        header('Location: ' . $grantAccessResponse['grantAccessUri'], true, 302);
-    } else if ($PARSED_URL === '/token') {
-        /* Show all tokens */
-        require('template/token.php');
-    } else if ($PARSED_URL === '/granted') {
-        /* Get status and grantAccessToken from ready2order */
-        $status = get_value('status');
-        $grantAccessToken = get_value('grantAccessToken');
-        if ($status !== 'approved' /* check status */ || !isset($_SESSION['grantAccessToken']) || $grantAccessToken !== $_SESSION['grantAccessToken'] /* Check if grantAccessToken is valid */) {
-            ?><h2>Ein Fehler ist beim Anmelden bei ready2order aufgetreten!</h2><?php
-            exit();
-        }
-
-
-        /* Restart session and invalidate session data */
-        session_destroy();
-        session_start();
-
-        /* Save tokens and client to session */
-        $_SESSION['grantAccessToken'] = $grantAccessToken;
-
-        /* Get accountToken from ready2order and save it as a SESSION Token */
-        $accountToken = get_value('accountToken');
-        update_and_get_account_token($accountToken);
-
-        /* Update client */
-        get_client_if_logged_in();
-
-        /* Redirect to index.php */
-        header('Location: ' . $SERVER_ADDRESS, true, 302);
-    } else {
-        /* Inform if day is opened */
-        include("template/report/report.php");
-        ?>
-        <div class="my-3">
-            <?php
-            /* Show orders */
-            include("template/orders.php");
-            ?>
-        </div>
-        <?php
-    }
+    include_once("template/sidebar.php");
+    include_once("template/navbar.php");
     ?>
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="content-fluid">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Übersicht</h1>
+                </div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="content-fluid">
+
+
+                <?php
+
+                if ($PARSED_URL === '/auth') {
+                    /* Authenticate developer at ready2order API */
+                    try {
+                        $grantAccessResponse = auth_as_developer($_ENV['DEVELOPER_TOKEN'], create_internal_link('/granted'));
+                    } catch (JsonException $e) {
+                        ?><h2>Ein Fehler beim Authentifizieren als Entwickler ist aufgetreten!</h2><?php
+                        exit();
+                    }
+                    /* Safe grantAccessToken to session */
+                    $_SESSION['grantAccessToken'] = $grantAccessResponse['grantAccessToken'];
+
+                    /* Redirect to ready2order authorization page */
+                    header('Location: ' . $grantAccessResponse['grantAccessUri'], true, 302);
+                } else if ($PARSED_URL === '/token') {
+                    /* Show all tokens */
+                    require('template/token.php');
+                } else if ($PARSED_URL === '/granted') {
+                    /* Get status and grantAccessToken from ready2order */
+                    $status = get_value('status');
+                    $grantAccessToken = get_value('grantAccessToken');
+                    if ($status !== 'approved' /* check status */ || !isset($_SESSION['grantAccessToken']) || $grantAccessToken !== $_SESSION['grantAccessToken'] /* Check if grantAccessToken is valid */) {
+                        ?><h2>Ein Fehler ist beim Anmelden bei ready2order aufgetreten!</h2><?php
+                        exit();
+                    }
+
+
+                    /* Restart session and invalidate session data */
+                    session_destroy();
+                    session_start();
+
+                    /* Save tokens and client to session */
+                    $_SESSION['grantAccessToken'] = $grantAccessToken;
+
+                    /* Get accountToken from ready2order and save it as a SESSION Token */
+                    $accountToken = get_value('accountToken');
+                    update_and_get_account_token($accountToken);
+
+                    /* Update client */
+                    get_client_if_logged_in();
+
+                    /* Redirect to index.php */
+                    header('Location: ' . create_internal_link(), true, 302);
+                } else {
+                    /* Inform if day is opened */
+                    include("template/report/report.php");
+                    ?>
+                    <div class="my-3">
+                        <?php
+                        /* Show orders */
+                        include("template/orders.php");
+                        ?>
+                    </div>
+                    <?php
+                }
+                ?>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>
