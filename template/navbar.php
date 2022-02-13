@@ -11,17 +11,17 @@ $SERVER_ADDRESS = create_internal_link();
         <?php if (!$is_logged_in) { ?>
             <li class="nav-item d-none d-sm-inline-block">
                 <!-- Link to authenticate at ready2order API -->
-                <a href="<?php echo $SERVER_ADDRESS . '/auth'; ?>" class="nav-link">Anmelden</a>
+                <a href="<?php echo create_internal_link('/auth'); ?>" class="nav-link">Anmelden</a>
             </li>
         <?php } ?>
         <?php if ($is_logged_in) { ?>
             <li class="nav-item d-none d-sm-inline-block">
                 <!-- Link to refresh page -->
-                <a href="<?php echo $SERVER_ADDRESS; ?>" class="nav-link">Aktualisieren</a>
+                <a href="<?php echo create_internal_link(); ?>" class="nav-link">Aktualisieren</a>
             </li>
             <li class="nav-item d-none d-sm-inline-block">
                 <!-- Link to logout -->
-                <a href="<?php echo $SERVER_ADDRESS . '/logout'; ?>" class="nav-link">Abmelden</a>
+                <a href="<?php echo create_internal_link('/logout'); ?>" class="nav-link">Abmelden</a>
             </li>
         <?php } ?>
     </ul>

@@ -42,42 +42,50 @@ if ($orders === false) {
 $amount_orders = 0;
 
 ?>
+<div class="card">
+    <div class="card-header border-0">
+        <div class="d-flex justify-content-between">
+            <h5 class="card-title">Bestellungen</h5>
+        </div>
+    </div>
+    <div class="card-body table-responsive p-0">
+        <table class="table table-striped table-valign-middle">
+            <thead>
+            <tr>
+                <th scope="col">Produkt</th>
+                <th scope="col">Anzahl</th>
+                <th scope="col">Datum</th>
+            </tr>
+            </thead>
+            <tbody>
 
-<table class="table">
-    <thead>
-    <tr>
-        <th scope="col">Produkt</th>
-        <th scope="col">Anzahl</th>
-        <th scope="col">Datum</th>
-    </tr>
-    </thead>
-    <tbody>
-
-    <?php
-    if (count($orders) === 0) {
-        ?>
-        <tr>
-            <td colspan="3">Aktuell gibt es keine Bestellungen.</td>
-        </tr>
-        <?php
-    } else {
-        foreach ($orders as $invoices) {
-            foreach ($invoices['items'] as $item) {
-                $amount_orders++;
-                /* Time as string */
-                $time = date('H:i, d.m.Y', strtotime($item[$key_timestamp]));
+            <?php
+            if (count($orders) === 0) {
                 ?>
                 <tr>
-                    <td class="product-name"><?php echo $item[$key_name] ?></td>
-                    <td class="product-quantity"><?php echo $item[$key_quantity] ?></td>
-                    <td colspan="100%" class="timestamp"><?php echo $time ?></td>
+                    <td colspan="3">Aktuell gibt es keine Bestellungen.</td>
                 </tr>
-            <?php }
-        }
-    }
+                <?php
+            } else {
+                foreach ($orders as $invoices) {
+                    foreach ($invoices['items'] as $item) {
+                        $amount_orders++;
+                        /* Time as string */
+                        $time = date('H:i, d.m.Y', strtotime($item[$key_timestamp]));
+                        ?>
+                        <tr>
+                            <td class="product-name"><?php echo $item[$key_name] ?></td>
+                            <td class="product-quantity"><?php echo $item[$key_quantity] ?></td>
+                            <td colspan="100%" class="timestamp"><?php echo $time ?></td>
+                        </tr>
+                    <?php }
+                }
+            }
 
-    $_SESSION['amount_orders'] = $amount_orders;
+            $_SESSION['amount_orders'] = $amount_orders;
 
-    ?>
-    </tbody>
-</table>
+            ?>
+            </tbody>
+        </table>
+    </div>
+</div>
