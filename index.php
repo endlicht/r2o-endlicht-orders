@@ -5,10 +5,6 @@
 *
 *    Please see LICENSE file for your rights under this license. */
 
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
-set_error_handler("var_dump");
-
 require __DIR__ . '/vendor/autoload.php';
 
 include("scripts/r2o-orders/php/auth.php");
