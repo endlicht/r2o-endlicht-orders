@@ -36,6 +36,9 @@ function auth_as_developer(string $dev_token, string $callback_uri = 'http://loc
     curl_setopt($curl, CURLOPT_POSTFIELDS, $auth_callback_uri);
 
     $response = curl_exec($curl);
+    if ($response === false) {
+        return false;
+    }
 
     /* Close curl resource, and free up system resources */
     curl_close($curl);
