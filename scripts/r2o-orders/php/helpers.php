@@ -54,7 +54,16 @@ function safe_to_file(string $folderpath, string $filename, string $value): bool
     return true;
 }
 
-$SERVER_ADDRESS = $_SESSION['SERVER_ADDRESS'] ?? "http://{$_SERVER['HTTP_HOST']}";
+/**
+ * Checks if Server is using HTTPS.
+ * @return bool
+ */
+function is_secure(): bool
+{
+    return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] === 443;
+}
+
+$SERVER_ADDRESS = $_SESSION['SERVER_ADDRESS'] ?? ((is_secure() ? 'https://' : 'http://') . $_SERVER['HTTP_HOST']);
 
 /**
  * Creates link with SERVER_ADDRESS as base.
