@@ -20,8 +20,9 @@ $TITLE = get_company_name() . " Bestellungen";
     <!-- CSS -->
     <!-- Bootstrap 5 -->
     <link rel="stylesheet" href="../style/vendor/bootstrap.min.css">
+
     <!-- Theme style -->
-    <link rel="stylesheet" href="../style/css/adminlte.min.css">
+    <link rel="stylesheet" href="../style/vendor/adminlte.min.css">
 
     <!-- ICONS -->
     <!-- IonIcons -->
