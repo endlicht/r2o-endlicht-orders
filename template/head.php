@@ -28,7 +28,7 @@ $TITLE = get_company_name() . " Bestellungen";
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
     <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="../style/vendor/fontawesome-free/css/all.min.css">
+    <script defer src="../style/vendor/fontawesome-free/all.min.js"></script>
 
     <!-- FONTS -->
     <!-- Google Font -->
