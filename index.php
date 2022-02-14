@@ -42,22 +42,31 @@ update_and_get_account_token();
     ?>
     <div class="content-wrapper">
         <?php
-
-        if ($PARSED_URL === '/auth') {
-            require("pages/auth.php");
-        } else if ($PARSED_URL === '/token') {
-            include_once('pages/token.php');
-        } else if ($PARSED_URL === '/logout') {
-            require("pages/logout.php");
-        } else if ($PARSED_URL === '/granted') {
-            require("pages/granted.php");
-        } else if ($PARSED_URL === '/') {
-            require("pages/dashboard.php");
+        if (is_connected()) {
+            if ($PARSED_URL === '/auth') {
+                require("pages/auth.php");
+            } else if ($PARSED_URL === '/token') {
+                include_once('pages/token.php');
+            } else if ($PARSED_URL === '/logout') {
+                require("pages/logout.php");
+            } else if ($PARSED_URL === '/granted') {
+                require("pages/granted.php");
+            } else if ($PARSED_URL === '/') {
+                $client = get_client_if_logged_in();
+                if ($client === false) {
+                    require("pages/login.php");
+                } else {
+                    require("pages/dashboard.php");
+                }
+            } else {
+                include_once("pages/404.php");
+            }
         } else {
-            include_once("pages/404.php");
+            require("pages/network_error.php");
         }
         ?>
     </div>
 </div>
+<?php include_once("pages/footer.php"); ?>
 </body>
 </html>
