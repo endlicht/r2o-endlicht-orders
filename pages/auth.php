@@ -20,11 +20,19 @@
         try {
             $grantAccessResponse = auth_as_developer($_ENV['DEVELOPER_TOKEN'], create_internal_link('/granted'));
             if ($grantAccessResponse === false) {
-                ?><h2>Ein Fehler beim Authentifizieren als Entwickler ist aufgetreten!</h2><?php
+                ?>
+                <h5 class="text-warning">
+                    Authentifizierung fehlgeschlagen.
+                </h5>
+                <?php
                 exit();
             }
         } catch (JsonException $e) {
-            ?><h2>Ein Fehler beim Authentifizieren als Entwickler ist aufgetreten!</h2><?php
+            ?>
+            <h5 class="text-warning">
+                Authentifizierung fehlgeschlagen.
+            </h5>
+            <?php
             exit();
         }
 
