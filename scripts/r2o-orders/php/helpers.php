@@ -75,3 +75,20 @@ function create_internal_link(string $link = ''): string
     global $SERVER_ADDRESS;
     return $SERVER_ADDRESS . $link;
 }
+
+/**
+ * Check if is connected to network.
+ * @return bool
+ */
+function is_connected(): bool
+{
+    $connected_80 = @fsockopen("www.google.com", 80);
+    if ($connected_80) {
+        $is_conn = true;
+        fclose($connected_80);
+    } else {
+        $is_conn = false;
+    }
+    return $is_conn;
+
+}
