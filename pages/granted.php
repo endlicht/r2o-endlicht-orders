@@ -1,3 +1,11 @@
+<?php
+/*
+*    r2o-orders: The simple way to show orders from r2o API.
+*    Copyright (c) 2022 Josef Müller
+*
+*    Please see LICENSE file for your rights under this license. */
+
+?>
 <div class="content-header">
     <div class="content-fluid">
         <div class="col-sm-6">
@@ -13,7 +21,9 @@
         $grantAccessToken = get_value('grantAccessToken');
         if ($status !== 'approved' /* check status */ || !isset($_SESSION['grantAccessToken']) || $grantAccessToken !== $_SESSION['grantAccessToken'] /* Check if grantAccessToken is valid */) {
             ?>
-            <h2>Ein Fehler ist beim Anmelden bei ready2order aufgetreten!</h2>
+            <h5 class="text-warning">
+                Authentifizierung fehlgeschlagen.
+            </h5>
             <?php
             exit();
         }
