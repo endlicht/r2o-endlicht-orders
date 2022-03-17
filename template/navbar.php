@@ -1,4 +1,10 @@
 <?php
+/*
+*    r2o-orders: The simple way to show orders from r2o API.
+*    Copyright (c) 2022 Josef Müller
+*
+*    Please see LICENSE file for your rights under this license. */
+
 $is_logged_in = get_client_if_logged_in() !== false;
 $SERVER_ADDRESS = create_internal_link();
 ?>
