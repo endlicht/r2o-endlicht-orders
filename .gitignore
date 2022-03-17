@@ -70,6 +70,9 @@ test.html
 ad.js
 /.cache/
 
+# Private
+*.priv
+
 # Environments
 .env
 
