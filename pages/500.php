@@ -1,7 +1,7 @@
 <div class="content-header">
     <div class="content-fluid">
         <div class="col-sm-6">
-            <h1 class="m-0">500 Fehler</h1>
+            <h1 class="m-0">Interner Fehler</h1>
         </div>
     </div>
 </div>

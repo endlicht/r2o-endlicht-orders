@@ -1,7 +1,7 @@
 <div class="content-header">
     <div class="content-fluid">
         <div class="col-sm-6">
-            <h1 class="m-0">404 Nicht gefunden</h1>
+            <h1 class="m-0">Seite nicht gefunden</h1>
         </div>
     </div>
 </div>

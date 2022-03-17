@@ -1,11 +1,19 @@
-<div class="content-header">
-    <div class="content-fluid">
-        <div class="col-sm-6">
-            <h1 class="m-0">Abmeldung von ready2order</h1>
+<?php
+/*
+*    r2o-orders: The simple way to show orders from r2o API.
+*    Copyright (c) 2022 Josef Müller
+*
+*    Please see LICENSE file for your rights under this license. */
+?>
+    <div class="content-header">
+        <div class="content-fluid">
+            <div class="col-sm-6">
+                <h1 class="m-0">Abmeldung von ready2order</h1>
+            </div>
         </div>
     </div>
-</div>
 <?php
+
 /* Revoke access from ready2order */
 $client = get_client_if_logged_in();
 if ($client !== false) {
