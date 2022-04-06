@@ -5,22 +5,14 @@
 *
 *    Please see LICENSE file for your rights under this license. */
 ?>
-<div class="content-header">
-    <div class="content-fluid">
-        <div class="col-sm-6">
-            <h1 class="m-0">Anmeldung bei ready2order</h1>
-        </div>
+<div class="row">
+    <div class="col">
+        <h2>Weiterleitung zu ready2order ...</h2>
     </div>
 </div>
-<div class="content">
-    <div class="container-fluid">
+<div class="row">
+    <div class="col">
         <?php
-        /*
-        *    r2o-orders: The simple way to show orders from r2o API.
-        *    Copyright (c) 2022 Josef Müller
-        *
-        *    Please see LICENSE file for your rights under this license. */
-
         include_once("scripts/r2o-orders/php/auth.php");
 
         /* Authenticate developer at ready2order API */
@@ -28,17 +20,13 @@
             $grantAccessResponse = auth_as_developer($_ENV['DEVELOPER_TOKEN'], create_internal_link('/granted'));
             if ($grantAccessResponse === false) {
                 ?>
-                <h5 class="text-warning">
-                    Authentifizierung fehlgeschlagen.
-                </h5>
+                Authentifizierung fehlgeschlagen.
                 <?php
                 exit();
             }
         } catch (JsonException $e) {
             ?>
-            <h5 class="text-warning">
-                Authentifizierung fehlgeschlagen.
-            </h5>
+            Authentifizierung fehlgeschlagen.
             <?php
             exit();
         }
@@ -47,11 +35,11 @@
         $_SESSION['grantAccessToken'] = $grantAccessResponse['grantAccessToken'];
 
         ?>
-        Weiterleitung zur Authentifizierung bei ready2order...
+        Bitte warten!
+        <script>
+            setTimeout(() => {
+                window.location.href = '<?php echo $grantAccessResponse['grantAccessUri']; ?>';
+            }, 200);
+        </script>
     </div>
 </div>
-<script>
-    setTimeout(() => {
-        window.location.href = '<?php echo $grantAccessResponse['grantAccessUri']; ?>';
-    }, 2000);
-</script>

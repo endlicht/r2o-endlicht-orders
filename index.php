@@ -33,40 +33,33 @@ update_and_get_account_token();
 <!doctype html>
 <html lang="de">
 <?php include_once("template/head.php"); ?>
-<body class="sidebar-mini sidebar-is-opening">
-<div class="wrapper">
-
-    <?php
-    include_once("template/sidebar.php");
-    include_once("template/navbar.php");
-    ?>
-    <div class="content-wrapper">
+<body>
+<div class="container-fluid">
+    <header>
         <?php
-        if (is_connected()) {
-            if ($PARSED_URL === '/auth') {
-                require("pages/auth.php");
-            } else if ($PARSED_URL === '/token') {
-                include_once('pages/token.php');
-            } else if ($PARSED_URL === '/logout') {
-                require("pages/logout.php");
-            } else if ($PARSED_URL === '/granted') {
-                require("pages/granted.php");
-            } else if ($PARSED_URL === '/') {
-                $client = get_client_if_logged_in();
-                if ($client === false) {
-                    require("pages/login.php");
-                } else {
-                    require("pages/dashboard.php");
-                }
+        include_once("template/navbar.php");
+        ?>
+    </header>
+    <div class="row">
+        <?php
+        if ($PARSED_URL === '/auth') {
+            require("pages/auth.php");
+        } else if ($PARSED_URL === '/token') {
+            include_once('pages/token.php');
+        } else if ($PARSED_URL === '/logout') {
+            require("pages/logout.php");
+        } else if ($PARSED_URL === '/granted') {
+            require("pages/granted.php");
+        } else if ($PARSED_URL === '/') {
+            $client = get_client_if_logged_in();
+            if ($client === false) {
+                require("pages/login.php");
             } else {
-                include_once("pages/404.php");
+                require("pages/dashboard.php");
             }
-        } else {
-            require("pages/network_error.php");
         }
         ?>
     </div>
 </div>
-<?php include_once("pages/footer.php"); ?>
 </body>
 </html>

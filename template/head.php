@@ -21,9 +21,6 @@ $TITLE = get_company_name() . " Bestellungen";
     <!-- Bootstrap 5 -->
     <link rel="stylesheet" href="../style/vendor/bootstrap.min.css">
 
-    <!-- Theme style -->
-    <link rel="stylesheet" href="../style/vendor/adminlte.min.css">
-
     <!-- Font Awesome Icons -->
     <script defer src="../style/vendor/fontawesome-free/all.min.js"></script>
 
