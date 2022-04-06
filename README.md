@@ -17,3 +17,7 @@ A simple way of showing orders from [ready2order pOS system](https://ready2order
 ```env
 DEVELOPER_TOKEN=eyJ0eXAiO...
 ```
+
+## TODOs
+
+- [ ] Add auto-refresh of orders
