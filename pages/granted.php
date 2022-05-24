@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
 *    r2o-orders: The simple way to show orders from r2o API.
 *    Copyright (c) 2022 Josef Müller
@@ -27,7 +28,7 @@
 
             /* Get accountToken from ready2order and save it as a SESSION Token */
             $accountToken = get_value('accountToken');
-            update_and_get_account_token($accountToken);
+            get_set_acc_tok($accountToken);
 
             /* Update client */
             get_client_if_logged_in();
@@ -36,9 +37,10 @@
             Weiterleitung zum Dashboard...
             <script>
                 setTimeout(() => {
-                    window.location.href = '<?php echo create_internal_link(); ?>';
+                    window.location.href = '/';
                 }, 200);
             </script>
-        <?php } ?>
+            <?php
+        } ?>
     </div>
 </div>

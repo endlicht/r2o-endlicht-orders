@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
 *    r2o-orders: The simple way to show orders from r2o API.
 *    Copyright (c) 2022 Josef Müller
@@ -14,6 +15,6 @@
 <div class="row">
     <div class="col">
         Bitte melde dich an.<br>
-        <a href="<?php echo create_internal_link('/auth'); ?>" class="link-primary">Anmelden</a>
+        <a href="/auth" class="link-primary">Anmelden</a>
     </div>
 </div>

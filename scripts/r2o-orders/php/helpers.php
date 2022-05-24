@@ -1,20 +1,21 @@
 <?php
+declare(strict_types=1);
 /*
 *    r2o-orders: The simple way to show orders from r2o API.
 *    Copyright (c) 2022 Josef Müller
 *
 *    Please see LICENSE file for your rights under this license. */
 
-use JetBrains\PhpStorm\Pure;
-
 /**
  * Escape all HTML characters.
+ *
  * @param string|null $string $string
+ *
  * @return string
  */
 function clean_string(string|null $string): string
 {
-    if ($string === null) {
+    if ($string === NULL) {
         return '';
     }
     return htmlspecialchars($string, ENT_QUOTES);
@@ -22,12 +23,14 @@ function clean_string(string|null $string): string
 
 /**
  * Get value from global $_GET variable.
+ *
  * @param string|null $key
+ *
  * @return string
  */
-#[Pure] function get_value(string|null $key): string
+function get_value(string|null $key): string
 {
-    if ($key !== null && isset($_GET[$key])) {
+    if ($key !== NULL && isset($_GET[$key])) {
         return clean_string($_GET[$key]);
     }
     return '';
@@ -38,24 +41,25 @@ function clean_string(string|null $string): string
  */
 function safe_to_file(string $folderpath, string $filename, string $value): bool
 {
-    if (!is_dir($folderpath) && !mkdir($folderpath, 0777, true) && !is_dir($folderpath)) {
-        throw new \RuntimeException(sprintf('Directory "%s" was not created', $folderpath));
+    if (!is_dir($folderpath) && !mkdir($folderpath, 0777, TRUE) && !is_dir($folderpath)) {
+        throw new RuntimeException(sprintf('Directory "%s" was not created', $folderpath));
     }
     $file = fopen($folderpath . '/' . $filename, 'wb');
-    if ($file === false) {
-        return false;
+    if ($file === FALSE) {
+        return FALSE;
     }
-    if (fwrite($file, $value) === false) {
-        return false;
+    if (fwrite($file, $value) === FALSE) {
+        return FALSE;
     }
-    if (fclose($file) === false) {
-        return false;
+    if (fclose($file) === FALSE) {
+        return FALSE;
     }
-    return true;
+    return TRUE;
 }
 
 /**
  * Checks if Server is using HTTPS.
+ *
  * @return bool
  */
 function is_secure(): bool
@@ -67,28 +71,13 @@ $SERVER_ADDRESS = $_SESSION['SERVER_ADDRESS'] ?? ((is_secure() ? 'https://' : 'h
 
 /**
  * Creates link with SERVER_ADDRESS as base.
+ *
  * @param string $link
+ *
  * @return string
  */
 function create_internal_link(string $link = ''): string
 {
     global $SERVER_ADDRESS;
     return $SERVER_ADDRESS . $link;
-}
-
-/**
- * Check if is connected to network.
- * @return bool
- */
-function is_connected(): bool
-{
-    $connected_80 = @fsockopen("www.google.com", 80);
-    if ($connected_80) {
-        $is_conn = true;
-        fclose($connected_80);
-    } else {
-        $is_conn = false;
-    }
-    return $is_conn;
-
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
 *    r2o-orders: The simple way to show orders from r2o API.
 *    Copyright (c) 2022 Josef Müller
@@ -14,14 +15,14 @@
 <div class="row">
     <div class="col-lg-6">
         <?php
-        /* Show orders */
-        include("template/orders.php");
+        /* show orders */
+        require __DIR__ . '/../template/orders.php';
         ?>
     </div>
     <div class="col-lg-6">
         <?php
-        /* Inform if day is opened */
-        include("template/report/report.php");
+        /* inform if day is opened */
+        require __DIR__ . '/../template/report/report.php';
         ?>
     </div>
 </div>

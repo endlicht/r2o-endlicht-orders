@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
 *    r2o-orders: The simple way to show orders from r2o API.
 *    Copyright (c) 2022 Josef Müller
@@ -15,14 +16,14 @@
         <?php
 
         /* Revoke access from ready2order */
-        $client = get_client_if_logged_in();
-        if ($client !== false) {
+        global $client;
+        if ($client !== FALSE) {
             $client->post('access/revoke');
             ?>
             Weiterleitung zur Startseite...
             <script>
                 setTimeout(() => {
-                    window.location.href = '<?php echo create_internal_link(); ?>';
+                    window.location.href = '/';
                 }, 200);
             </script>
             <?php

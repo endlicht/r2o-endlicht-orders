@@ -1,3 +1,4 @@
 <?php
-$amount_orders = $_SESSION['amount_orders'] ?? 0;
-echo $amount_orders ?> Bestellungen heute.
+declare(strict_types=1);
+global $amount_orders;
+echo $amount_orders ?? 0 ?> Bestellungen heute.

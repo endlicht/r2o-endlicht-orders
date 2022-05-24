@@ -1,12 +1,14 @@
 <?php
+declare(strict_types=1);
 /*
 *    r2o-orders: The simple way to show orders from r2o API.
 *    Copyright (c) 2022 Josef Müller
 *
 *    Please see LICENSE file for your rights under this license. */
 
-$client = get_client_if_logged_in();
-if ($client === false) {
+global $client;
+
+if ($client === FALSE) {
     return;
 }
 
@@ -16,10 +18,10 @@ try {
     return;
 }
 
-$open = $status['status'] === 'open';
-$_SESSION['open'] = $open;
+$day_is_opened = $status['status'] === 'open';
+$_SESSION['open'] = $day_is_opened;
 
-if ($open) {
+if ($day_is_opened) {
     ?>
     Der Tag ist geöffnet.
     <?php

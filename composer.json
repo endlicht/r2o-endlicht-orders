@@ -1,6 +1,6 @@
 {
-  "name": "jpkmiller/r2o-orders",
-  "description": "An example app for r2o to show how to use the API",
+  "name": "endlicht/r2o-endlicht-orders",
+  "description": "Orders for Café Endlicht",
   "license": "MIT",
   "scripts": {
     "dev": "php -S 127.0.0.1:8000",

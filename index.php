@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /*
 *    r2o-orders: The simple way to show orders from r2o API.
 *    Copyright (c) 2022 Josef Müller
@@ -7,55 +8,66 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-include_once("scripts/r2o-orders/php/auth.php");
-include_once("scripts/r2o-orders/php/helpers.php");
-include_once("scripts/r2o-orders/php/company.php");
-
 /* Used to load private key from .env file */
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->safeLoad();
 
+require __DIR__ . '/scripts/r2o-orders/php/auth.php';
+require __DIR__ . '/scripts/r2o-orders/php/helpers.php';
+require __DIR__ . '/scripts/r2o-orders/php/company.php';
+require __DIR__ . '/scripts/r2o-orders/php/orders.php';
+
 /* If session is not set start it */
 session_start();
 
-$URL = $_SERVER['REQUEST_URI'];
+$parsed_url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-$PARSED_URL = parse_url($URL, PHP_URL_PATH);
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Cache-Control: post-check=0, pre-check=0', FALSE);
+header('Pragma: no-cache');
 
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
+get_set_acc_tok();
+$client = get_client_if_logged_in();
 
-/* Read account token from cache if it exists */
-update_and_get_account_token();
+$title = get_company_name() . ' Bestellungen';
 
 ?>
 <!doctype html>
 <html lang="de">
-<?php include_once("template/head.php"); ?>
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="default-src 'none'; base-uri 'none'; child-src 'self'; form-action 'self'; frame-src 'self'; font-src 'self'; connect-src 'self'; img-src 'self'; manifest-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'"
+          http-equiv="Content-Security-Policy">
+    <meta name="description" content="Bestellungen">
+    <meta name="author" content="Josef Müller">
+    <title><?= $title ?></title>
+    <link rel="stylesheet" href="/style/vendor/bootstrap.min.css">
+</head>
+
 <body>
 <div class="container-fluid">
     <header>
         <?php
-        include_once("template/navbar.php");
+        require __DIR__ . '/template/navbar.php';
         ?>
     </header>
     <div class="row">
         <?php
-        if ($PARSED_URL === '/auth') {
-            require("pages/auth.php");
-        } else if ($PARSED_URL === '/token') {
-            include_once('pages/token.php');
-        } else if ($PARSED_URL === '/logout') {
-            require("pages/logout.php");
-        } else if ($PARSED_URL === '/granted') {
-            require("pages/granted.php");
-        } else if ($PARSED_URL === '/') {
-            $client = get_client_if_logged_in();
-            if ($client === false) {
-                require("pages/login.php");
+        if ($parsed_url === '/auth') {
+            require __DIR__ . '/pages/auth.php';
+        } elseif ($parsed_url === '/token') {
+            require __DIR__ . '/pages/token.php';
+        } elseif ($parsed_url === '/logout') {
+            require __DIR__ . '/pages/logout.php';
+        } elseif ($parsed_url === '/granted') {
+            require __DIR__ . '/pages/granted.php';
+        } elseif ($parsed_url === '/') {
+            if ($client !== FALSE) {
+                require __DIR__ . '/pages/dashboard.php';
             } else {
-                require("pages/dashboard.php");
+                require __DIR__ . '/pages/login.php';
             }
         }
         ?>

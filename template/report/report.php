@@ -1,21 +1,31 @@
 <?php
-if (get_client_if_logged_in() !== false) {
+declare(strict_types=1);
+global $client;
+
+if ($client !== FALSE) {
     ?>
     <div class="card">
-        <h5 class="card-header border-0">
+        <div class="card-header border-0">
             <div class="d-flex justify-content-between">
                 <h5 class="card-title">Übersicht</h5>
             </div>
-        </h5>
+        </div>
         <div class="card-body">
             <div class="list-group">
                 <div class="list-group-item">
-                    <?php require_once("template/report/dailyReport.php"); ?>
+                    <?php
+                    require __DIR__ . '/dailyReport.php'; ?>
                 </div>
                 <div class="list-group-item">
-                    <?php require_once("template/report/ordersReport.php"); ?>
+                    <?php
+                    require __DIR__ . '/ordersReport.php'; ?>
+                </div>
+                <div class='list-group-item'>
+                    <?php
+                    require __DIR__ . '/recupReport.php'; ?>
                 </div>
             </div>
         </div>
     </div>
-<?php } ?>
+    <?php
+} ?>
