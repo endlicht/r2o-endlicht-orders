@@ -6,7 +6,6 @@ declare(strict_types=1);
 *
 *    Please see LICENSE file for your rights under this license. */
 
-require __DIR__ . '/../scripts/r2o-orders/php/auth.php';
 ?>
 <div class="row">
     <div class="col">

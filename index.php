@@ -13,10 +13,10 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->safeLoad();
 
 require_once __DIR__ . '/scripts/r2o-orders/php/orders.php';
-require __DIR__ . '/scripts/r2o-orders/php/auth.php';
-require __DIR__ . '/scripts/r2o-orders/php/helpers.php';
-require __DIR__ . '/scripts/r2o-orders/php/company.php';
-require __DIR__ . '/scripts/r2o-orders/php/email.php';
+require_once __DIR__ . '/scripts/r2o-orders/php/auth.php';
+require_once __DIR__ . '/scripts/r2o-orders/php/helpers.php';
+require_once __DIR__ . '/scripts/r2o-orders/php/company.php';
+require_once __DIR__ . '/scripts/r2o-orders/php/email.php';
 
 /* If session is not set start it */
 session_start();
