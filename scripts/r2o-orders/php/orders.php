@@ -78,10 +78,10 @@ function send_orders(array $amount_orders_by_name): void
 
     $orders = '';
     foreach ($amount_orders_by_name as $name => $amount) {
-        $orders .= '<li>' . $name . ': ' . $amount . '</li>';
+        $orders .= '<li>' . $name . ': ' . $amount . 'x</li>';
     }
 
-    send_mail('jo391mue@htwg-konstanz.de', 'Recups', "
+    send_mail('endlicht@vvs-kn.de', 'Recups', "
         Hallo,
         <p>
             heute wurden folgende Produkte verkauft:
