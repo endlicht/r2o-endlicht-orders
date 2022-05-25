@@ -1,10 +1,14 @@
 <?php
 declare(strict_types=1);
+/*
+*    r2o-orders: The simple way to show orders from r2o API.
+*    Copyright (c) 2022 Josef Müller
+*
+*    Please see LICENSE file for your rights under this license. */
 
 use ready2order\Client;
 
-$amount_orders = 0;
-$amount_recups = 0;
+$amount_orders_by_name = [];
 
 /**
  * Get orders via API.
@@ -27,7 +31,7 @@ function get_orders(Client $client, ?string $date = NULL): array|false
     }
 
     try {
-        return $client->get('document/invoice', ['items' => TRUE, 'dateFrom' => $date])['invoices'];
+        return $client->get('document/invoice', ['items' => TRUE, 'dateFrom' => $date, 'payments' => FALSE])['invoices'];
     } catch (Exception) {
         return FALSE;
     }
@@ -35,29 +39,55 @@ function get_orders(Client $client, ?string $date = NULL): array|false
 
 
 /**
- * Count each single item in an order.
- *
- * @return void
- */
-function count_order(): void
-{
-    global $amount_orders;
-    $amount_orders++;
-}
-
-/**
- * Increment recups if bought and decrement if brought back.
+ * Count all orders.
  *
  * @param string $item_name
  *
  * @return void
  */
-function count_recups(string $item_name): void
+function count_orders_by_name(string $item_name): void
 {
-    global $amount_recups;
-    if ($item_name === 'Pfand Recup zurück') {
-        --$amount_recups;
-    } elseif ($item_name === 'Pfand Recup') {
-        ++$amount_recups;
+    global $amount_orders_by_name;
+
+    $clean_item_name = $item_name;
+    $increment = TRUE;
+
+    /* if “zurück” is found then decrement */
+    if (str_contains($item_name, 'zurück')) {
+        $increment = FALSE;
+        $clean_item_name = trim(explode('zurück', $item_name)[0]);
     }
+
+    if (!array_key_exists($clean_item_name, $amount_orders_by_name)) {
+        $amount_orders_by_name[$clean_item_name] = 0;
+    }
+
+    /* increment or decrement amount depending on state */
+    $increment ? $amount_orders_by_name[$clean_item_name]++ : $amount_orders_by_name[$clean_item_name]--;
+}
+
+/**
+ * Sends amount of recups via email.
+ *
+ * @param array $amount_orders_by_name
+ *
+ * @return void
+ */
+function send_orders(array $amount_orders_by_name): void
+{
+
+    $orders = '';
+    foreach ($amount_orders_by_name as $name => $amount) {
+        $orders .= '<li>' . $name . ': ' . $amount . '</li>';
+    }
+
+    send_mail('jo391mue@htwg-konstanz.de', 'Recups', "
+        Hallo,
+        <p>
+            heute wurden folgende Produkte verkauft:
+            <ul>
+                $orders
+            </ul>
+        </p>
+    " . email_signature());
 }

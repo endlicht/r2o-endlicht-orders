@@ -19,8 +19,8 @@ require __DIR__ . '/../scripts/r2o-orders/php/auth.php';
 
         /* Authenticate developer at ready2order API */
         try {
-            $grantAccessResponse = auth_as_developer($_ENV['DEVELOPER_TOKEN'], create_internal_link('/granted'));
-            if ($grantAccessResponse === FALSE) {
+            $grant_access_response = auth_as_developer(get_env('DEVELOPER_TOKEN'), create_internal_link('/granted'));
+            if ($grant_access_response === FALSE) {
                 ?>
                 Authentifizierung fehlgeschlagen.
                 <?php
@@ -34,13 +34,13 @@ require __DIR__ . '/../scripts/r2o-orders/php/auth.php';
         }
 
         /* Safe grantAccessToken to session */
-        $_SESSION['grantAccessToken'] = $grantAccessResponse['grantAccessToken'];
+        $_SESSION['grantAccessToken'] = $grant_access_response['grantAccessToken'];
 
         ?>
         Bitte warten!
         <script>
             setTimeout(() => {
-                window.location.href = '<?= $grantAccessResponse['grantAccessUri'] ?>';
+                window.location.href = '<?= $grant_access_response['grantAccessUri'] ?>';
             }, 200);
         </script>
     </div>

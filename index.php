@@ -12,10 +12,11 @@ require __DIR__ . '/vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->safeLoad();
 
+require_once __DIR__ . '/scripts/r2o-orders/php/orders.php';
 require __DIR__ . '/scripts/r2o-orders/php/auth.php';
 require __DIR__ . '/scripts/r2o-orders/php/helpers.php';
 require __DIR__ . '/scripts/r2o-orders/php/company.php';
-require __DIR__ . '/scripts/r2o-orders/php/orders.php';
+require __DIR__ . '/scripts/r2o-orders/php/email.php';
 
 /* If session is not set start it */
 session_start();
@@ -28,9 +29,7 @@ header('Pragma: no-cache');
 
 get_set_acc_tok();
 $client = get_client_if_logged_in();
-
 $title = get_company_name() . ' Bestellungen';
-
 ?>
 <!doctype html>
 <html lang="de">
@@ -63,12 +62,14 @@ $title = get_company_name() . ' Bestellungen';
             require __DIR__ . '/pages/logout.php';
         } elseif ($parsed_url === '/granted') {
             require __DIR__ . '/pages/granted.php';
-        } elseif ($parsed_url === '/') {
-            if ($client !== FALSE) {
-                require __DIR__ . '/pages/dashboard.php';
-            } else {
-                require __DIR__ . '/pages/login.php';
+        } elseif ($client !== FALSE) {
+            if ($parsed_url === '/') {
+                require_once __DIR__ . '/pages/dashboard.php';
+            } elseif ($parsed_url === '/api') {
+                require __DIR__ . '/pages/api.php';
             }
+        } else {
+            require __DIR__ . '/pages/login.php';
         }
         ?>
     </div>

@@ -16,13 +16,12 @@ declare(strict_types=1);
     <div class="col-lg-6">
         <?php
         /* show orders */
-        require __DIR__ . '/../template/orders.php';
+        require_once __DIR__ . '/../template/orders.php';
         ?>
     </div>
     <div class="col-lg-6">
         <?php
-        /* inform if day is opened */
-        require __DIR__ . '/../template/report/report.php';
+        require_once __DIR__ . '/../template/report/report.php';
         ?>
     </div>
 </div>

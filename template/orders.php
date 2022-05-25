@@ -65,8 +65,7 @@ $key_item_id = 'item_id';
             } else {
                 foreach ($orders as $invoices) {
                     foreach ($invoices['items'] as $item) {
-                        count_order();
-                        count_recups($item[$key_name]);
+                        count_orders_by_name($item[$key_name]);
                         /* Time as string */
                         $time = date('H:i, d.m.Y', strtotime($item[$key_timestamp]));
                         ?>
@@ -84,6 +83,8 @@ $key_item_id = 'item_id';
                         <?php
                     }
                 }
+                global $amount_orders_by_name;
+                $_SESSION['$amount_orders_by_name'] = $amount_orders_by_name;
             }
             ?>
             </tbody>

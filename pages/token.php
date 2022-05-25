@@ -1,7 +1,7 @@
 <div>
     <ul>
         <li>DEVELOPER TOKEN: <code><?=
-                $_ENV['DEVELOPER_TOKEN'] ?></code></li>
+                get_env('DEVELOPER_TOKEN') ?></code></li>
         <li>GRANT ACCESS TOKEN: <code><?=
                 $_SESSION['grantAccessToken'] ?></code></li>
         <li>ACCOUNT TOKEN: <code><?=

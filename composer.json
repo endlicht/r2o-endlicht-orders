@@ -9,6 +9,7 @@
   "require": {
     "ready2order/r2o-api-client-php": "^1.2",
     "vlucas/phpdotenv": "^5.4",
+    "phpmailer/phpmailer": "^6.6",
     "ext-curl": "*"
   },
   "require-dev": {

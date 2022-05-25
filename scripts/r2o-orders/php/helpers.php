@@ -81,3 +81,27 @@ function create_internal_link(string $link = ''): string
     global $SERVER_ADDRESS;
     return $SERVER_ADDRESS . $link;
 }
+
+
+/**
+ * Get env variable.
+ *
+ * @param string $key
+ * @param string $default
+ *
+ * @return string
+ */
+function get_env(string $key, string $default = ''): string
+{
+    return $_ENV[$key] ?? $default;
+}
+
+/**
+ * Get random token.
+ *
+ * @return string
+ */
+function get_random_token(): string
+{
+    return md5(uniqid((string)mt_rand(), TRUE));
+}
