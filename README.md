@@ -16,10 +16,4 @@ A simple way of showing orders from [ready2order pOS system](https://ready2order
 
 ```env
 DEVELOPER_TOKEN=eyJ0eXAiO...
-
-MAIL_USERNAME=foo
-MAIL_ADDRESS=foo@bar.de
-MAIL_PASSWORD=foobar123
-MAIL_HOST=foo.bar.de
-MAIL_PORT=587
 ```
